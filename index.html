@@ -1,8 +1,84 @@
 <html>
+	<head>
 	<title>CougarCS career fair layout mockup</title>
 
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	</head>
+
 	<body>
-		Testing
+		<script typ="text/javascript">
+var grid = {
+	"width": 960,
+	"height": 500,
+	"x": 16,
+	"y": 10,
+	"padx": 10,
+	"pady": 5
+};
+
+var jsonRects =
+[
+/* bottom row */
+{ "x" :  4, "y" :  6, "name" :  "1TB", "reserved" : 1, "electricity" : 0, "orientation" : "h" },
+{ "x" :  6, "y" :  6, "name" :  "2TB", "reserved" : 1, "electricity" : 0, "orientation" : "h" },
+{ "x" :  8, "y" :  6, "name" :  "3TB", "reserved" : 1, "electricity" : 0, "orientation" : "h" },
+{ "x" : 10, "y" :  6, "name" :  "4TB", "reserved" : 1, "electricity" : 0, "orientation" : "h" },
+
+/* 3rd row */
+{ "x" :  2, "y" :  4, "name" :  "5"  , "reserved" : 0, "electricity" : 0, "orientation" : "h" },
+{ "x" :  4, "y" :  4, "name" :  "6"  , "reserved" : 0, "electricity" : 0, "orientation" : "h" },
+{ "x" :  6, "y" :  4, "name" :  "7"  , "reserved" : 0, "electricity" : 0, "orientation" : "h" },
+{ "x" :  8, "y" :  4, "name" :  "8"  , "reserved" : 0, "electricity" : 0, "orientation" : "h" },
+{ "x" : 10, "y" :  4, "name" :  "9"  , "reserved" : 0, "electricity" : 0, "orientation" : "h" },
+{ "x" : 12, "y" :  4, "name" : "10"  , "reserved" : 0, "electricity" : 0, "orientation" : "h" },
+
+/* 2nd row */
+{ "x" :  2, "y" :  2, "name" : "11"  , "reserved" : 0, "electricity" : 0, "orientation" : "h" },
+{ "x" :  4, "y" :  2, "name" : "12"  , "reserved" : 0, "electricity" : 0, "orientation" : "h" },
+{ "x" :  6, "y" :  2, "name" : "13"  , "reserved" : 0, "electricity" : 0, "orientation" : "h" },
+{ "x" :  8, "y" :  2, "name" : "14"  , "reserved" : 0, "electricity" : 0, "orientation" : "h" },
+{ "x" : 10, "y" :  2, "name" : "15"  , "reserved" : 0, "electricity" : 0, "orientation" : "h" },
+{ "x" : 12, "y" :  2, "name" : "16"  , "reserved" : 0, "electricity" : 0, "orientation" : "h" },
+
+/* top row */
+{ "x" :  2, "y" :  0, "name" : "17"  , "reserved" : 0, "electricity" : 1, "orientation" : "h" },
+{ "x" :  4, "y" :  0, "name" : "18"  , "reserved" : 0, "electricity" : 0, "orientation" : "h" },
+{ "x" :  6, "y" :  0, "name" : "19"  , "reserved" : 0, "electricity" : 0, "orientation" : "h" },
+{ "x" :  8, "y" :  0, "name" : "20"  , "reserved" : 0, "electricity" : 0, "orientation" : "h" },
+{ "x" : 10, "y" :  0, "name" : "21"  , "reserved" : 0, "electricity" : 0, "orientation" : "h" },
+{ "x" : 12, "y" :  0, "name" : "22"  , "reserved" : 0, "electricity" : 1, "orientation" : "h" },
+
+/* left wall */
+{ "x" :  0, "y" :  1, "name" : "23"  , "reserved" : 0, "electricity" : 1, "orientation" : "v" },
+{ "x" :  0, "y" :  3, "name" : "24"  , "reserved" : 0, "electricity" : 0, "orientation" : "v" },
+{ "x" :  0, "y" :  5, "name" : "25"  , "reserved" : 0, "electricity" : 0, "orientation" : "v" },
+{ "x" :  0, "y" :  7, "name" : "26"  , "reserved" : 0, "electricity" : 1, "orientation" : "v" },
+
+/* right wall */
+{ "x" : 15, "y" :  1, "name" : "27"  , "reserved" : 0, "electricity" : 1, "orientation" : "v" },
+{ "x" : 15, "y" :  3, "name" : "28"  , "reserved" : 0, "electricity" : 0, "orientation" : "v" },
+{ "x" : 15, "y" :  5, "name" : "29"  , "reserved" : 0, "electricity" : 0, "orientation" : "v" },
+{ "x" : 15, "y" :  7, "name" : "30"  , "reserved" : 0, "electricity" : 1, "orientation" : "v" },
+];
+
+var svgContainer = d3.select("body").append("svg")
+                                    .attr("width", grid.width + 200)
+                                    .attr("height", grid.height + 200);
+
+var rects = svgContainer.selectAll("rects")
+                          .data(jsonRects)
+                          .enter()
+                          .append("rect");
+
+var circleAttributes = rects
+                       .attr("width", function (d) { return ( d.orientation === "v" ? 1 : 2 ) * (grid.width / grid.x - grid.padx);  })
+                       .attr("height", function (d) { return ( d.orientation === "v" ? 2 : 1 ) * (grid.height / grid.y - grid.pady); })
+                       .attr("x", function (d) { return d.x * grid.width / grid.x + grid.padx; })
+                       .attr("y", function(d) { return d.y * grid.height / grid.y + grid.pady; })
+                       .style("stroke", function(d) { return "black"; })
+                       .style("stroke-width", function(d) { return 3; })
+                       .style("fill", function(d) { return d.reserved ? "red" : "none" ; });
+		</script>
 	</body>
 
 </html>

@@ -3,20 +3,35 @@
 	<title>CougarCS career fair layout mockup</title>
 
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 	</head>
 
 	<body>
+		<h1>Career fair table layout</h1>
+		<div id="svg"></div>
+
+		<div>
+			<p>
+			Table selected:
+			</p>
+
+			<div id="selection" style="font-size: 200%; text-align: center">None</div>
+		</div>
+
+
 		<script typ="text/javascript">
 var grid = {
 	"width": 960,
-	"height": 500,
+	"height": 400,
 	"x": 16,
-	"y": 10,
+	"y": 9,
 	"padx": 10,
 	"pady": 5,
 	"reserved_fill": "red",
-	"default_fill": "none",
-	"stroke_fill": "black",
+	"default_fill": "white",
+	"default_stroke_fill": "black",
+	"electricity_stroke_fill": "cyan",
 	"stroke_width": 3
 };
 
@@ -68,22 +83,24 @@ var jsonRects =
 { "x" : 15, "y" :  7, "name" : "30"  , "reserved" : 0, "electricity" : 1, "orientation" : "v" },
 ];
 
-var svgContainer = d3.select("body").append("svg")
-			.attr("width", grid.width + 200)
-			.attr("height", grid.height + 200);
+var svgContainer = d3.select("#svg").append("svg")
+			.attr("width", grid.width + 10)
+			.attr("height", grid.height );
 
 var tableGroup = svgContainer.selectAll("g")
 			.data(jsonRects)
 			.enter()
 			.append("g")
-			.attr("transform", function(d) { return "translate(" + (d.x * grid.pix_per_x) + ", " +  (d.y * grid.pix_per_y) + ")" } );
+			.attr("id", function(d) { return d.name } )
+			.attr("transform", function(d) { return "translate(" + (d.x * grid.pix_per_x) + ", " +  (d.y * grid.pix_per_y) + ")"; } )
+			.on('click', function(d) { $("#selection").text( d.name ) } );
 
 var rects = tableGroup.append("rect")
 			.attr("width", function (d) { return  ( d.orientation === "v" ? 1 : 2 ) * (grid.pix_per_x - grid.padx); })
 			.attr("height", function (d) { return ( d.orientation === "v" ? 2 : 1 ) * (grid.pix_per_y - grid.pady); })
 			.attr("x", function(d) { return grid.padx; })
 			.attr("y", function(d) { return grid.pady; })
-			.style("stroke", function(d) { return grid.stroke_fill; })
+			.style("stroke", function(d) { return d.electricity ? grid.electricity_stroke_fill : grid.default_stroke_fill; })
 			.style("stroke-width", function(d) { return grid.stroke_width; })
 			.style("fill", function(d) { return d.reserved ? grid.reserved_fill : grid.default_fill ; });
 
@@ -94,6 +111,7 @@ var texts = tableGroup.append("text")
 			.attr("dy", ".35em") /* shift down baseline to get vertical alignment */
 			.text(function(d) { return d.name } );
 		</script>
+
 	</body>
 
 </html>

@@ -69,22 +69,23 @@ var jsonRects =
 ];
 
 var svgContainer = d3.select("body").append("svg")
-                                    .attr("width", grid.width + 200)
-                                    .attr("height", grid.height + 200);
+			.attr("width", grid.width + 200)
+			.attr("height", grid.height + 200);
 
-var rects = svgContainer.selectAll("rects")
-                          .data(jsonRects)
-                          .enter()
-                          .append("rect");
+var tableGroup = svgContainer.selectAll("g")
+			.data(jsonRects)
+			.enter()
+			.append("g")
+			.attr("transform", function(d) { return "translate(" + (d.x * grid.pix_per_x) + ", " +  (d.y * grid.pix_per_y) + ")" } );
 
-var circleAttributes = rects
-                       .attr("width", function (d) { return ( d.orientation === "v" ? 1 : 2 ) * (grid.pix_per_x - grid.padx);  })
-                       .attr("height", function (d) { return ( d.orientation === "v" ? 2 : 1 ) * (grid.pix_per_y - grid.pady); })
-                       .attr("x", function (d) { return d.x * grid.pix_per_x + grid.padx; })
-                       .attr("y", function(d) { return d.y * grid.pix_per_y + grid.pady; })
-                       .style("stroke", function(d) { return grid.stroke_fill; })
-                       .style("stroke-width", function(d) { return grid.stroke_width; })
-                       .style("fill", function(d) { return d.reserved ? grid.reserved_fill : grid.default_fill ; });
+var rects = tableGroup.append("rect")
+			.attr("width", function (d) { return  ( d.orientation === "v" ? 1 : 2 ) * (grid.pix_per_x - grid.padx); })
+			.attr("height", function (d) { return ( d.orientation === "v" ? 2 : 1 ) * (grid.pix_per_y - grid.pady); })
+			.attr("x", function(d) { return grid.padx; })
+			.attr("y", function(d) { return grid.pady; })
+			.style("stroke", function(d) { return grid.stroke_fill; })
+			.style("stroke-width", function(d) { return grid.stroke_width; })
+			.style("fill", function(d) { return d.reserved ? grid.reserved_fill : grid.default_fill ; });
 		</script>
 	</body>
 

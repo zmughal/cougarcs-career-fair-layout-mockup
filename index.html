@@ -13,8 +13,15 @@ var grid = {
 	"x": 16,
 	"y": 10,
 	"padx": 10,
-	"pady": 5
+	"pady": 5,
+	"reserved_fill": "red",
+	"default_fill": "none",
+	"stroke_fill": "black",
+	"stroke_width": 3
 };
+
+grid.pix_per_x = grid.width / grid.x;
+grid.pix_per_y = grid.height / grid.y;
 
 var jsonRects =
 [
@@ -71,13 +78,13 @@ var rects = svgContainer.selectAll("rects")
                           .append("rect");
 
 var circleAttributes = rects
-                       .attr("width", function (d) { return ( d.orientation === "v" ? 1 : 2 ) * (grid.width / grid.x - grid.padx);  })
-                       .attr("height", function (d) { return ( d.orientation === "v" ? 2 : 1 ) * (grid.height / grid.y - grid.pady); })
-                       .attr("x", function (d) { return d.x * grid.width / grid.x + grid.padx; })
-                       .attr("y", function(d) { return d.y * grid.height / grid.y + grid.pady; })
-                       .style("stroke", function(d) { return "black"; })
-                       .style("stroke-width", function(d) { return 3; })
-                       .style("fill", function(d) { return d.reserved ? "red" : "none" ; });
+                       .attr("width", function (d) { return ( d.orientation === "v" ? 1 : 2 ) * (grid.pix_per_x - grid.padx);  })
+                       .attr("height", function (d) { return ( d.orientation === "v" ? 2 : 1 ) * (grid.pix_per_y - grid.pady); })
+                       .attr("x", function (d) { return d.x * grid.pix_per_x + grid.padx; })
+                       .attr("y", function(d) { return d.y * grid.pix_per_y + grid.pady; })
+                       .style("stroke", function(d) { return grid.stroke_fill; })
+                       .style("stroke-width", function(d) { return grid.stroke_width; })
+                       .style("fill", function(d) { return d.reserved ? grid.reserved_fill : grid.default_fill ; });
 		</script>
 	</body>
 

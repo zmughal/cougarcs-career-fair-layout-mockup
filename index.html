@@ -86,6 +86,13 @@ var rects = tableGroup.append("rect")
 			.style("stroke", function(d) { return grid.stroke_fill; })
 			.style("stroke-width", function(d) { return grid.stroke_width; })
 			.style("fill", function(d) { return d.reserved ? grid.reserved_fill : grid.default_fill ; });
+
+var texts = tableGroup.append("text")
+			.attr("x", function(d) { return grid.padx + (grid.pix_per_x - grid.padx) * ( d.orientation === "v" ? 0.5 : 1 ) } )
+			.attr("y", function(d) { return grid.pady + (grid.pix_per_y - grid.pady) * ( d.orientation === "v" ? 1 : 0.5 ) } )
+			.attr("text-anchor", "middle") /* center baseline on text width */
+			.attr("dy", ".35em") /* shift down baseline to get vertical alignment */
+			.text(function(d) { return d.name } );
 		</script>
 	</body>
 

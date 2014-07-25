@@ -32,7 +32,10 @@ var grid = {
 	"default_fill": "white",
 	"default_stroke_fill": "black",
 	"electricity_stroke_fill": "cyan",
-	"stroke_width": 3
+	"stroke_width": 3,
+	"v": { "w": 1, "h": 2 },
+	"h": { "w": 2, "h": 1 },
+	"legend": { "x": 7, "y": 7.5 }
 };
 
 grid.pix_per_x = grid.width / grid.x;
@@ -83,21 +86,29 @@ var jsonRects =
 { "x" : 15, "y" :  7, "name" : "30"  , "reserved" : 0, "electricity" : 1, "orientation" : "v" },
 ];
 
+var jsonLegend = [
+	{ "color": grid.reserved_fill           , "label": "reserved"            },
+	{ "color": grid.electricity_stroke_fill , "label": "electricity capable" },
+	{ "color": grid.default_fill            , "label": "available"           }
+];
+
+
 var svgContainer = d3.select("#svg").append("svg")
 			.attr("width", grid.width + 10)
 			.attr("height", grid.height );
 
-var tableGroup = svgContainer.selectAll("g")
+var tableGroup = svgContainer.selectAll(".cftable")
 			.data(jsonRects)
 			.enter()
 			.append("g")
+			.attr("class", "cftable")
 			.attr("id", function(d) { return d.name } )
 			.attr("transform", function(d) { return "translate(" + (d.x * grid.pix_per_x) + ", " +  (d.y * grid.pix_per_y) + ")"; } )
 			.on('click', function(d) { $("#selection").text( d.name ) } );
 
 var rects = tableGroup.append("rect")
-			.attr("width", function (d) { return  ( d.orientation === "v" ? 1 : 2 ) * (grid.pix_per_x - grid.padx); })
-			.attr("height", function (d) { return ( d.orientation === "v" ? 2 : 1 ) * (grid.pix_per_y - grid.pady); })
+			.attr("width", function (d) { return  ( d.orientation === "v" ? grid.v.w : grid.h.w ) * (grid.pix_per_x - grid.padx); })
+			.attr("height", function (d) { return ( d.orientation === "v" ? grid.v.h : grid.h.h ) * (grid.pix_per_y - grid.pady); })
 			.attr("x", function(d) { return grid.padx; })
 			.attr("y", function(d) { return grid.pady; })
 			.style("stroke", function(d) { return d.electricity ? grid.electricity_stroke_fill : grid.default_stroke_fill; })
@@ -105,11 +116,34 @@ var rects = tableGroup.append("rect")
 			.style("fill", function(d) { return d.reserved ? grid.reserved_fill : grid.default_fill ; });
 
 var texts = tableGroup.append("text")
-			.attr("x", function(d) { return grid.padx + (grid.pix_per_x - grid.padx) * ( d.orientation === "v" ? 0.5 : 1 ) } )
-			.attr("y", function(d) { return grid.pady + (grid.pix_per_y - grid.pady) * ( d.orientation === "v" ? 1 : 0.5 ) } )
+			.attr("x", function(d) { return grid.padx + (grid.pix_per_x - grid.padx) * ( d.orientation === "v" ? grid.v.w : grid.h.w ) / 2 } )
+			.attr("y", function(d) { return grid.pady + (grid.pix_per_y - grid.pady) * ( d.orientation === "v" ? grid.v.h : grid.h.h ) / 2 } )
 			.attr("text-anchor", "middle") /* center baseline on text width */
 			.attr("dy", ".35em") /* shift down baseline to get vertical alignment */
 			.text(function(d) { return d.name } );
+
+
+var legend = svgContainer.selectAll(".legend")
+			.data( jsonLegend )
+			.enter()
+			.append("g")
+			.attr("transform", function(d) { return "translate(" + (grid.legend.x * grid.pix_per_x) + ", " +  (grid.legend.y * grid.pix_per_y) + ")"; } )
+
+var legend_rects = legend.append("rect")
+			.attr("x", 0)
+			.attr("y", function(d,i) { return i * 15; } )
+			.attr("width", 10)
+			.attr("height", 10)
+			.attr("fill", function(d) { return d.color })
+			.style("stroke", "black")
+			.style("stroke-width", 1)
+var legend_text = legend.append("text")
+			.attr("x", 20)
+			.attr("y", function(d,i) { return i * 15; } )
+			.attr("dominant-baseline", "central")
+			.attr("dy", ".20em") /* shift down baseline to get vertical alignment */
+			.text(function(d) { return d.label } );
+
 		</script>
 
 	</body>
